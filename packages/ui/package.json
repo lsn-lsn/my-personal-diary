@@ -2,24 +2,50 @@
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
-    "./*": "./src/*.tsx"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./button": {
+      "types": "./dist/button.d.ts",
+      "import": "./dist/button.js"
+    },
+    "./card": {
+      "types": "./dist/card.d.ts",
+      "import": "./dist/card.js"
+    },
+    "./code": {
+      "types": "./dist/code.d.ts",
+      "import": "./dist/code.js"
+    }
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "biome check .",
+    "check": "biome check .",
+    "format": "biome format --write .",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
-    "eslint": "^9.39.1",
-    "typescript": "5.9.2"
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "5.9.2",
+    "vite": "^6.4.2",
+    "vite-plugin-dts": "^3.9.1"
   },
   "dependencies": {
+    "@radix-ui/react-toast": "1.2.15",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   }

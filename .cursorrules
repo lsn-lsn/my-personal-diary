@@ -1,0 +1,13 @@
+You are an expert in TypeScript, React, Next.js, and Tailwind CSS.
+
+This is a Turborepo monorepo. When modifying code:
+1. Check which package the file belongs to
+2. Respect package boundaries - import through public API (index.ts)
+3. Use workspace protocol for internal dependencies
+4. Follow the naming conventions in AGENTS.md
+
+When creating new features:
+1. Create under packages/features/[feature-name]/
+2. Include: components/, hooks/, services/, types/, index.ts
+3. Export public API through index.ts
+4. Add package.json with workspace dependencies

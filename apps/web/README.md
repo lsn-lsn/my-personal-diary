@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+This app uses Next.js 15 (App Router) with Server Actions.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the URL printed in terminal to test `梨树贴吧`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+- Next.js 15 + App Router
+- Server Actions
+- Prisma + Session Auth
+- Vercel AI SDK
+- shadcn-style UI + Tailwind CSS
+- Biome
 
-## Learn More
+## Environment
 
-To learn more about Next.js, take a look at the following resources:
+Copy `.env.example` to `.env` and set:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `OPENAI_API_KEY`
+- `OPENAI_BASE_URL` (optional, for gateway providers)
+- `APP_BASE_URL` (used in password reset email links)
+- `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` (for reset emails)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Auth
 
-## Deploy on Vercel
+- Register with `username + email + password`
+- Login creates HttpOnly session cookie
+- Forgot password: request reset by email, then open reset link to set new password
+- Password reset email has HTML template; same account has 1-minute cooldown on reset requests
+- Update profile from top-right `...` modal (name/avatar)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Prisma
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm --filter web db:generate
+pnpm --filter web db:push
+```

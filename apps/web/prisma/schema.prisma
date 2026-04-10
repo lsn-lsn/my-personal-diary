@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model DiaryEntry {
+  id           String   @id @default(cuid())
+  authorId     String?
+  author       User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorName   String   @default("momo")
+  authorAvatar String   @default("🙂")
+  content      String
+  summary      String?
+  createdAt    DateTime @default(now())
+  comments     Comment[]
+  likes        Like[]
+
+  @@index([createdAt])
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  authorId     String?
+  author       User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorName   String     @default("momo")
+  authorAvatar String     @default("🙂")
+  content      String
+  createdAt    DateTime   @default(now())
+  entryId      String
+  entry        DiaryEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([entryId, createdAt])
+}
+
+model User {
+  id           String      @id @default(cuid())
+  username     String?     @unique
+  email        String      @unique
+  passwordHash String
+  displayName  String      @default("momo")
+  avatar       String      @default("🙂")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  posts        DiaryEntry[]
+  comments     Comment[]
+  likes        Like[]
+  sessions     Session[]
+  resetTokens  PasswordResetToken[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId, expiresAt])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entryId   String
+  entry     DiaryEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, entryId])
+  @@index([entryId, createdAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId, expiresAt])
+}
