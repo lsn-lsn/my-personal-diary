@@ -20,11 +20,6 @@ type Props = {
   authAction: (formData: FormData) => void;
   isAuthPending: boolean;
   authState: { ok: boolean; message: string };
-  forgotAction: (formData: FormData) => void;
-  isForgotPending: boolean;
-  forgotState: { ok: boolean; message: string };
-  showForgotPassword: boolean;
-  onShowForgotPasswordChange: (show: boolean) => void;
 };
 
 export function LoginDialog({
@@ -35,11 +30,6 @@ export function LoginDialog({
   authAction,
   isAuthPending,
   authState,
-  forgotAction,
-  isForgotPending,
-  forgotState,
-  showForgotPassword,
-  onShowForgotPasswordChange,
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -85,6 +75,7 @@ export function LoginDialog({
             type="email"
             placeholder="邮箱"
             required
+            defaultValue={mode === "login" ? "lishuna616@gmail.com" : ""}
           />
           <Input
             name="password"
@@ -92,8 +83,9 @@ export function LoginDialog({
             placeholder="密码（至少6位）"
             required
             minLength={6}
+            defaultValue={mode === "login" ? "test123456" : ""}
           />
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end">
             <p className="text-sm text-red-600">
               {!authState.ok && authState.message}
             </p>
@@ -102,35 +94,6 @@ export function LoginDialog({
             </Button>
           </div>
         </form>
-
-        {mode === "login" && (
-          <button
-            type="button"
-            onClick={() => onShowForgotPasswordChange(!showForgotPassword)}
-            className="text-sm text-muted-foreground underline"
-          >
-            {showForgotPassword ? "收起忘记密码" : "忘记密码？"}
-          </button>
-        )}
-
-        {showForgotPassword && mode === "login" && (
-          <form action={forgotAction} className="mt-4 space-y-4">
-            <Input
-              name="email"
-              type="email"
-              placeholder="输入注册邮箱接收重置链接"
-              required
-            />
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-red-600">
-                {!forgotState.ok && forgotState.message}
-              </p>
-              <Button type="submit" loading={isForgotPending} size="sm">
-                发送重置邮件
-              </Button>
-            </div>
-          </form>
-        )}
       </DialogContent>
     </Dialog>
   );

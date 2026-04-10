@@ -22,7 +22,6 @@ import {
   loginAction,
   logoutAction,
   registerAction,
-  requestPasswordResetAction,
   searchDiaryEntriesAction,
   toggleLikeAction,
   updateDiaryEntryAction,
@@ -114,7 +113,6 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const [loginDialogMode, setLoginDialogMode] = useState<"login" | "register">("login");
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   // Auth guard modal state
   const [authGuardOpen, setAuthGuardOpen] = useState(false);
@@ -162,19 +160,6 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
         router.refresh();
       } else {
         toast.error("更新失败", result.message);
-      }
-      return result;
-    },
-    initialState,
-  );
-
-  const [forgotState, forgotAction, isForgotPending] = useActionState(
-    async (_prevState: typeof initialState, formData: FormData) => {
-      const result = await requestPasswordResetAction(formData);
-      if (result.ok) {
-        toast.success("邮件已发送", "请检查您的邮箱");
-      } else {
-        toast.error("发送失败", result.message);
       }
       return result;
     },
@@ -670,11 +655,6 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
         authAction={authAction}
         isAuthPending={isAuthPending}
         authState={authState}
-        forgotAction={forgotAction}
-        isForgotPending={isForgotPending}
-        forgotState={forgotState}
-        showForgotPassword={showForgotPassword}
-        onShowForgotPasswordChange={setShowForgotPassword}
       />
 
       {/* Auth Guard Modal */}
