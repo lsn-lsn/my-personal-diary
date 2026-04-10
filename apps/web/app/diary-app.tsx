@@ -103,7 +103,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
 
   const [isSearching, startSearchTransition] = useTransition();
   const [isCommentSubmitting, startCommentTransition] = useTransition();
-  const [isLikePending, startLikeTransition] = useTransition();
+  const [likingEntryIds, setLikingEntryIds] = useState<Set<string>>(new Set());
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
@@ -219,16 +219,23 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
     });
   };
 
-  const handleToggleLike = (entryId: string) => {
+  const handleToggleLike = async (entryId: string) => {
     if (!currentUser) {
       setAuthGuardAction("like");
       setAuthGuardOpen(true);
       return;
     }
-    startLikeTransition(async () => {
-      const result = await toggleLikeAction(entryId);
+    setLikingEntryIds((prev) => new Set(prev).add(entryId));
+    try {
+      await toggleLikeAction(entryId);
       router.refresh();
-    });
+    } finally {
+      setLikingEntryIds((prev) => {
+        const next = new Set(prev);
+        next.delete(entryId);
+        return next;
+      });
+    }
   };
 
   const handleDeletePost = async (entryId: string) => {
@@ -468,7 +475,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                   <div className="flex items-center gap-2">
                     <Button
                       type="button"
-                      loading={isLikePending}
+                      loading={likingEntryIds.has(entry.id)}
                       onClick={() => handleToggleLike(entry.id)}
                       size="sm"
                       className={`rounded-lg ${

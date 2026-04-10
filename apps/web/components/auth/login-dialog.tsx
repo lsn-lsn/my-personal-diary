@@ -94,12 +94,8 @@ export function LoginDialog({
             minLength={6}
           />
           <div className="flex items-center justify-between">
-            <p
-              className={
-                authState.ok ? "text-sm text-green-600" : "text-sm text-red-600"
-              }
-            >
-              {authState.message}
+            <p className="text-sm text-red-600">
+              {!authState.ok && authState.message}
             </p>
             <Button type="submit" loading={isAuthPending}>
               {mode === "register" ? "注册" : "登录"}
@@ -126,14 +122,8 @@ export function LoginDialog({
               required
             />
             <div className="flex items-center justify-between">
-              <p
-                className={
-                  forgotState.ok
-                    ? "text-sm text-green-600"
-                    : "text-sm text-red-600"
-                }
-              >
-                {forgotState.message}
+              <p className="text-sm text-red-600">
+                {!forgotState.ok && forgotState.message}
               </p>
               <Button type="submit" loading={isForgotPending} size="sm">
                 发送重置邮件
