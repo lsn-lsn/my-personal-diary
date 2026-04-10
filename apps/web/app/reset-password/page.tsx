@@ -45,9 +45,9 @@ function ResetPasswordContent() {
   }, [countdown, router]);
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-      <h1 className="mb-2 text-2xl font-black text-zinc-900">重置密码</h1>
-      <p className="mb-4 text-sm text-zinc-500">
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5 shadow-sm">
+      <h1 className="mb-2 text-2xl font-black text-[var(--text-primary)]">重置密码</h1>
+      <p className="mb-4 text-sm text-[var(--text-secondary)]">
         请输入新密码（至少 6 位）。
       </p>
 
@@ -61,7 +61,7 @@ function ResetPasswordContent() {
           minLength={6}
         />
         <div className="flex items-center justify-between">
-          <p className="text-xs text-red-600">
+          <p className="text-xs text-red-500">
             {!state.ok && state.message}
           </p>
           <Button
@@ -73,14 +73,14 @@ function ResetPasswordContent() {
           </Button>
         </div>
         {state.ok && countdown !== null ? (
-          <p className="text-xs text-green-600">
+          <p className="text-xs text-green-500">
             密码重置成功，{countdown} 秒后自动跳转首页...
           </p>
         ) : null}
       </form>
 
-      <div className="mt-4 text-xs text-zinc-500">
-        <Link href="/" className="underline">
+      <div className="mt-4 text-xs text-[var(--text-muted)]">
+        <Link href="/" className="underline hover:text-[var(--text-primary)]">
           返回首页
         </Link>
       </div>
@@ -90,16 +90,16 @@ function ResetPasswordContent() {
 
 function LoadingFallback() {
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-      <h1 className="mb-2 text-2xl font-black text-zinc-900">重置密码</h1>
-      <p className="text-sm text-zinc-500">加载中...</p>
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5 shadow-sm">
+      <h1 className="mb-2 text-2xl font-black text-[var(--text-primary)]">重置密码</h1>
+      <p className="text-sm text-[var(--text-secondary)]">加载中...</p>
     </div>
   );
 }
 
 export default function ResetPasswordPage() {
   return (
-    <main className="min-h-screen bg-[#fcfaf5] px-4 py-10">
+    <main className="min-h-screen bg-[var(--bg-main)] px-4 py-10">
       <Suspense fallback={<LoadingFallback />}>
         <ResetPasswordContent />
       </Suspense>

@@ -23,11 +23,61 @@
   --color-border: oklch(90% 0.005 286);
   --color-input: oklch(90% 0.005 286);
   --color-ring: oklch(18% 0.005 286);
+  --color-pear: oklch(85% 0.08 90);
+  --color-pear-light: oklch(92% 0.06 90);
+  --color-cream: oklch(97% 0.02 90);
   --radius: 0.5rem;
 }
 
 :root {
   color-scheme: light;
+  --bg-main: #fcfaf5;
+  --bg-card: #ffffff;
+  --bg-comment: #fcfaf5;
+  --bg-summary: #f8f4ea;
+  --bg-pear: #f5deab;
+  --bg-pear-hover: #ecd090;
+  --bg-avatar: #f2e6cf;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --text-muted: #a1a1aa;
+  --border-color: #e4e4e7;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-background: oklch(15% 0.005 286);
+  --color-foreground: oklch(92% 0.005 286);
+  --color-card: oklch(20% 0.005 286);
+  --color-card-foreground: oklch(92% 0.005 286);
+  --color-popover: oklch(20% 0.005 286);
+  --color-popover-foreground: oklch(92% 0.005 286);
+  --color-primary: oklch(92% 0.005 286);
+  --color-primary-foreground: oklch(15% 0.005 286);
+  --color-secondary: oklch(25% 0.005 286);
+  --color-secondary-foreground: oklch(92% 0.005 286);
+  --color-muted: oklch(25% 0.005 286);
+  --color-muted-foreground: oklch(65% 0.005 286);
+  --color-accent: oklch(25% 0.005 286);
+  --color-accent-foreground: oklch(92% 0.005 286);
+  --color-destructive: oklch(45% 0.22 25);
+  --color-destructive-foreground: oklch(92% 0 0);
+  --color-border: oklch(30% 0.005 286);
+  --color-input: oklch(30% 0.005 286);
+  --color-ring: oklch(92% 0.005 286);
+  --color-pear: oklch(70% 0.12 90);
+  --color-pear-light: oklch(75% 0.10 90);
+  --bg-main: #1a1a1f;
+  --bg-card: #242429;
+  --bg-comment: #1f1f24;
+  --bg-summary: #2a2a30;
+  --bg-pear: #b8954a;
+  --bg-pear-hover: #a07d3a;
+  --bg-avatar: #3a3530;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --border-color: #3f3f46;
 }
 
 * {
@@ -36,7 +86,8 @@
 
 body {
   margin: 0;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--bg-main);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }

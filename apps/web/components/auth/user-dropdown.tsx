@@ -68,7 +68,7 @@ export function UserDropdown({
               <AvatarFallback>🙂</AvatarFallback>
             </Avatar>
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f2e6cf] text-lg">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--bg-avatar)] text-lg">
               {avatarValue}
             </div>
           )}

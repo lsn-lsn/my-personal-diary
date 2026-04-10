@@ -11,6 +11,7 @@ import { Loader } from "../components/ui/loader";
 import { UserDropdown } from "../components/auth/user-dropdown";
 import { LoginDialog } from "../components/auth/login-dialog";
 import { AuthGuardModal } from "../components/auth/auth-guard-modal";
+import { ThemeToggle } from "../components/theme-toggle";
 import {
   type DiaryEntryView,
   type UserView,
@@ -59,12 +60,12 @@ function Avatar({ value }: { value: string }) {
       <img
         src={value}
         alt="avatar"
-        className="h-10 w-10 rounded-full border border-zinc-200 object-cover"
+        className="h-10 w-10 rounded-full border border-border object-cover"
       />
     );
   }
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f2e6cf] text-xl">
+    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-avatar)] text-xl">
       {value || "🙂"}
     </div>
   );
@@ -336,15 +337,15 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf5]">
+    <div className="min-h-screen bg-[var(--bg-main)]">
       <div className="mx-auto w-full max-w-3xl px-4 pb-20 pt-4 md:px-6">
-        <header className="sticky top-0 z-20 mb-4 border-b border-zinc-200/80 bg-[#fcfaf5]/95 pb-3 backdrop-blur">
+        <header className="sticky top-0 z-20 mb-4 border-b border-[var(--border-color)] bg-[var(--bg-main)]/95 pb-3 backdrop-blur">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-black tracking-tight">梨树贴吧</h1>
-            <div className="flex items-center gap-2 text-zinc-700">
+            <div className="flex items-center gap-2 text-[var(--text-secondary)]">
               <button
                 type="button"
-                className="rounded-lg p-1 hover:bg-zinc-100"
+                className="rounded-lg p-1 hover:bg-muted"
                 onClick={() => {
                   const next = !isSearchOpen;
                   setIsSearchOpen(next);
@@ -356,6 +357,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
               >
                 <IconSearch />
               </button>
+              <ThemeToggle />
               <UserDropdown
                 currentUser={currentUser}
                 onLoginClick={() => handleOpenLoginDialog("login")}
@@ -366,7 +368,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
               <Button
                 type="button"
                 onClick={handlePostClick}
-                className="rounded-xl bg-[#f5deab] px-4 py-2 text-sm font-bold text-zinc-900 hover:bg-[#ecd090]"
+                className="rounded-xl bg-[var(--bg-pear)] px-4 py-2 text-sm font-bold text-[var(--text-primary)] hover:bg-[var(--bg-pear-hover)]"
               >
                 {isEditorOpen ? "收起" : "发帖"}
               </Button>
@@ -379,8 +381,8 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
               onClick={() => setSortMode("latest")}
               className={`rounded-full px-3 py-1 text-sm ${
                 sortMode === "latest"
-                  ? "bg-zinc-900 text-white"
-                  : "bg-white text-zinc-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-card text-foreground"
               }`}
             >
               最新
@@ -390,8 +392,8 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
               onClick={() => setSortMode("hot")}
               className={`rounded-full px-3 py-1 text-sm ${
                 sortMode === "hot"
-                  ? "bg-zinc-900 text-white"
-                  : "bg-white text-zinc-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-card text-foreground"
               }`}
             >
               最热
@@ -399,7 +401,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
           </div>
 
           {isSearchOpen ? (
-            <div className="mt-3 rounded-xl border border-zinc-200 bg-white p-3">
+            <div className="mt-3 rounded-xl border border-border bg-card p-3">
               <div className="flex items-center gap-2">
                 <Input
                   value={searchKeyword}
@@ -425,7 +427,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                   搜索
                 </Button>
               </div>
-              <p className="mt-2 text-xs text-zinc-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 {isSearching ? "搜索中..." : `共 ${shownEntries.length} 条结果`}
               </p>
             </div>
@@ -433,15 +435,15 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
         </header>
 
         {isEditorOpen ? (
-          <section className="mb-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+          <section className="mb-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
             <form action={postAction} className="space-y-3">
-              <p className="text-base font-semibold text-zinc-700">
+              <p className="text-base font-semibold text-foreground">
                 发布新帖子
               </p>
               <Textarea
                 name="content"
                 placeholder="写点什么，发到梨树贴吧..."
-                className="min-h-36 rounded-xl border-zinc-200 bg-white text-base"
+                className="min-h-36 rounded-xl border-border bg-card text-base"
               />
               <div className="flex items-center justify-between">
                 <p
@@ -456,7 +458,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                 <Button
                   type="submit"
                   loading={isPosting}
-                  className="rounded-xl bg-[#f5deab] px-5 text-zinc-900 hover:bg-[#ecd090]"
+                  className="rounded-xl bg-[var(--bg-pear)] px-5 text-[var(--text-primary)] hover:bg-[var(--bg-pear-hover)]"
                 >
                   发帖
                 </Button>
@@ -467,7 +469,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
           <button
             type="button"
             onClick={handlePostClick}
-            className="mb-4 w-full rounded-2xl border border-dashed border-zinc-300 bg-[#f7f1e6] px-4 py-5 text-left text-zinc-600"
+            className="mb-4 w-full rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-summary)] px-4 py-5 text-left text-[var(--text-secondary)]"
           >
             点这里发一条新帖子...
           </button>
@@ -475,7 +477,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
 
         <section className="space-y-4">
           {shownEntries.length === 0 ? (
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-sm text-zinc-500">
+            <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
               {isSearchOpen
                 ? "未搜索到匹配内容，请换个关键词。"
                 : "还没有帖子，先发第一条吧。"}
@@ -484,16 +486,16 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
             shownEntries.map((entry) => (
               <article
                 key={entry.id}
-                className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-border bg-card p-5 shadow-sm"
               >
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Avatar value={entry.authorAvatar} />
                     <div>
-                      <p className="text-sm font-semibold text-zinc-900">
+                      <p className="text-sm font-semibold text-foreground">
                         {entry.authorName || "momo"}
                       </p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-muted-foreground">
                         {formatDay(entry.createdAt)}
                       </p>
                     </div>
@@ -506,8 +508,8 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                       size="sm"
                       className={`rounded-lg ${
                         entry.likedByMe
-                          ? "bg-red-100 text-red-700 hover:bg-red-200"
-                          : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                          ? "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50"
+                          : "bg-muted text-muted-foreground hover:bg-accent"
                       }`}
                     >
                       {entry.likedByMe ? "已赞" : "点赞"} {entry.likesCount}
@@ -521,7 +523,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                             setEditingEntryId(entry.id);
                             setEditingContent(entry.content);
                           }}
-                          className="rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                          className="rounded-lg bg-muted text-muted-foreground hover:bg-accent"
                         >
                           编辑
                         </Button>
@@ -530,7 +532,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                           size="sm"
                           loading={isDeleting}
                           onClick={() => handleDeletePost(entry.id)}
-                          className="rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                          className="rounded-lg bg-muted text-muted-foreground hover:bg-accent"
                         >
                           删除
                         </Button>
@@ -544,7 +546,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                     <Textarea
                       value={editingContent}
                       onChange={(e) => setEditingContent(e.target.value)}
-                      className="min-h-24 rounded-xl border-zinc-200 bg-white text-base"
+                      className="min-h-24 rounded-xl border-border bg-card text-base"
                     />
                     <div className="flex items-center gap-2">
                       <Button
@@ -566,36 +568,36 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                     </div>
                   </div>
                 ) : (
-                  <p className="whitespace-pre-wrap text-lg leading-8 text-zinc-900">
+                  <p className="whitespace-pre-wrap text-lg leading-8 text-foreground">
                     {entry.content}
                   </p>
                 )}
 
                 {entry.summary ? (
-                  <p className="mt-3 rounded-lg bg-[#f8f4ea] px-3 py-2 text-sm text-zinc-600">
+                  <p className="mt-3 rounded-lg bg-[var(--bg-summary)] px-3 py-2 text-sm text-[var(--text-secondary)]">
                     AI 总结：{entry.summary}
                   </p>
                 ) : null}
 
-                <div className="mt-4 space-y-2 rounded-xl bg-[#fcfaf5] p-3">
-                  <p className="text-xs font-semibold text-zinc-500">
+                <div className="mt-4 space-y-2 rounded-xl bg-[var(--bg-comment)] p-3">
+                  <p className="text-xs font-semibold text-muted-foreground">
                     评论区（{entry.comments.length}）
                   </p>
                   <div className="space-y-2">
                     {entry.comments.length === 0 ? (
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-muted-foreground/60">
                         暂无评论，来抢沙发吧。
                       </p>
                     ) : (
                       entry.comments.map((comment) => (
                         <div
                           key={comment.id}
-                          className="flex items-start gap-2 rounded-lg bg-white p-2"
+                          className="flex items-start gap-2 rounded-lg bg-card p-2"
                         >
                           <Avatar value={comment.authorAvatar} />
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between">
-                              <p className="text-xs font-semibold text-zinc-700">
+                              <p className="text-xs font-semibold text-foreground/80">
                                 {comment.authorName}
                               </p>
                               {currentUser?.id === comment.authorId && (
@@ -603,13 +605,13 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                                   type="button"
                                   onClick={() => handleDeleteComment(comment.id)}
                                   disabled={deletingCommentIds.has(comment.id)}
-                                  className="text-xs text-zinc-400 hover:text-red-500 disabled:opacity-50"
+                                  className="text-xs text-muted-foreground hover:text-red-500 disabled:opacity-50"
                                 >
                                   {deletingCommentIds.has(comment.id) ? "删除中..." : "删除"}
                                 </button>
                               )}
                             </div>
-                            <p className="whitespace-pre-wrap text-sm text-zinc-800">
+                            <p className="whitespace-pre-wrap text-sm text-foreground/90">
                               {comment.content}
                             </p>
                           </div>
@@ -649,7 +651,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
           <button
             type="button"
             onClick={handlePostClick}
-            className="fixed bottom-6 right-6 h-16 w-16 rounded-2xl bg-[#f5deab] text-4xl text-zinc-900 shadow-md md:hidden"
+            className="fixed bottom-6 right-6 h-16 w-16 rounded-2xl bg-[var(--bg-pear)] text-4xl text-[var(--text-primary)] shadow-md md:hidden"
           >
             +
           </button>
@@ -686,7 +688,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
       {/* Profile Modal */}
       {isProfileOpen && currentUser ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-xl">
+          <div className="w-full max-w-md rounded-2xl bg-card p-4 shadow-xl border border-border">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-lg font-bold">个人资料</h3>
               <button type="button" onClick={() => setIsProfileOpen(false)}>
@@ -714,15 +716,15 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                     onClick={() => setProfileAvatar(avatar)}
                     className={`flex h-9 w-9 items-center justify-center rounded-full border text-lg ${
                       profileAvatar === avatar
-                        ? "border-zinc-900 bg-[#f2e6cf]"
-                        : "border-zinc-200 bg-white"
+                        ? "border-[var(--text-primary)] bg-[var(--bg-avatar)]"
+                        : "border-border bg-card"
                     }`}
                   >
                     {avatar}
                   </button>
                 ))}
-                <div className="ml-2 inline-flex items-center gap-2 rounded-xl border border-zinc-200 px-2 py-1">
-                  <span className="text-xs text-zinc-500">预览</span>
+                <div className="ml-2 inline-flex items-center gap-2 rounded-xl border border-border px-2 py-1">
+                  <span className="text-xs text-muted-foreground">预览</span>
                   <Avatar value={profileAvatar} />
                 </div>
               </div>

@@ -48,7 +48,7 @@ export default async function Home() {
   const currentUser = await getCurrentUser();
   const entries = await getDiaryEntries(currentUser?.id ?? null);
   return (
-    <main className="min-h-screen bg-[#f8f5ef] text-zinc-900">
+    <main>
       <DiaryApp
         initialEntries={entries}
         currentUser={
