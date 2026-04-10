@@ -16,6 +16,7 @@ import {
   type UserView,
   createCommentAction,
   createDiaryEntryAction,
+  deleteCommentAction,
   deleteDiaryEntryAction,
   loginAction,
   logoutAction,
@@ -104,6 +105,7 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
   const [isSearching, startSearchTransition] = useTransition();
   const [isCommentSubmitting, startCommentTransition] = useTransition();
   const [likingEntryIds, setLikingEntryIds] = useState<Set<string>>(new Set());
+  const [deletingCommentIds, setDeletingCommentIds] = useState<Set<string>>(new Set());
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
@@ -255,6 +257,30 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
       }
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!window.confirm("确认删除这条评论吗？")) {
+      return;
+    }
+    setDeletingCommentIds((prev) => new Set(prev).add(commentId));
+    try {
+      const fd = new FormData();
+      fd.set("commentId", commentId);
+      const result = await deleteCommentAction(fd);
+      if (result.ok) {
+        toast.success("评论已删除");
+        router.refresh();
+      } else {
+        toast.error("删除失败", result.message);
+      }
+    } finally {
+      setDeletingCommentIds((prev) => {
+        const next = new Set(prev);
+        next.delete(commentId);
+        return next;
+      });
     }
   };
 
@@ -568,9 +594,21 @@ function DiaryAppContent({ initialEntries, currentUser }: Props) {
                         >
                           <Avatar value={comment.authorAvatar} />
                           <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold text-zinc-700">
-                              {comment.authorName}
-                            </p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-semibold text-zinc-700">
+                                {comment.authorName}
+                              </p>
+                              {currentUser?.id === comment.authorId && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteComment(comment.id)}
+                                  disabled={deletingCommentIds.has(comment.id)}
+                                  className="text-xs text-zinc-400 hover:text-red-500 disabled:opacity-50"
+                                >
+                                  {deletingCommentIds.has(comment.id) ? "删除中..." : "删除"}
+                                </button>
+                              )}
+                            </div>
                             <p className="whitespace-pre-wrap text-sm text-zinc-800">
                               {comment.content}
                             </p>

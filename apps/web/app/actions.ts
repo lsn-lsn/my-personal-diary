@@ -359,6 +359,25 @@ export async function createCommentAction(
   }
 }
 
+export async function deleteCommentAction(
+  formData: FormData,
+): Promise<ActionState> {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { ok: false, message: "请先登录。" };
+  }
+  const commentId = String(formData.get("commentId") ?? "").trim();
+  if (!commentId) {
+    return { ok: false, message: "评论不存在。" };
+  }
+  const comment = await prisma.comment.findUnique({ where: { id: commentId } });
+  if (!comment || comment.authorId !== user.id) {
+    return { ok: false, message: "你没有权限删除该评论。" };
+  }
+  await prisma.comment.delete({ where: { id: commentId } });
+  return { ok: true, message: "评论已删除。" };
+}
+
 export async function toggleLikeAction(entryId: string): Promise<ActionState> {
   const user = await getCurrentUser();
   if (!user) {

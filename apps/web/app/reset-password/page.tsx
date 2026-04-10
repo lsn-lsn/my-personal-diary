@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useActionState, useEffect, useState } from "react";
 
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import { resetPasswordAction } from "../actions";
 
 const initialState = { ok: false, message: "" };
@@ -52,38 +53,35 @@ function ResetPasswordContent() {
 
       <form action={formAction} className="space-y-3">
         <input type="hidden" name="token" value={token} />
-        <input
+        <Input
           name="password"
           type="password"
           placeholder="新密码"
-          className="h-10 w-full rounded-xl border border-zinc-200 px-3 text-sm"
+          required
+          minLength={6}
         />
         <div className="flex items-center justify-between">
-          <p
-            className={
-              state.ok ? "text-xs text-green-600" : "text-xs text-red-600"
-            }
-          >
-            {state.message}
+          <p className="text-xs text-red-600">
+            {!state.ok && state.message}
           </p>
           <Button
             type="submit"
-            disabled={isPending || !token || state.ok}
-            className="rounded-xl bg-zinc-900 px-4 text-sm text-white"
+            loading={isPending}
+            disabled={!token || state.ok}
           >
             提交
           </Button>
         </div>
         {state.ok && countdown !== null ? (
-          <p className="text-xs text-zinc-500">
-            密码重置成功，{countdown} 秒后自动跳转到登录页...
+          <p className="text-xs text-green-600">
+            密码重置成功，{countdown} 秒后自动跳转首页...
           </p>
         ) : null}
       </form>
 
       <div className="mt-4 text-xs text-zinc-500">
         <Link href="/" className="underline">
-          返回首页登录
+          返回首页
         </Link>
       </div>
     </div>
